@@ -1,0 +1,36 @@
+﻿@page
+@model Countrys.Pages.CountrysModel
+@using Newtonsoft.Json
+@{
+    string countriesJson = JsonConvert.SerializeObject(Model.CountriesList);
+}
+
+<div>
+    <input type="text" id="searchInput" placeholder="Введіть текст: " />
+    <button id="searchButton">Пошук</button>
+</div>
+<ul id="countryList"></ul>
+@section Scripts
+{
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const countryList = document.getElementById('countryList');
+        searchInput.addEventListener('input', filterCountries);
+        const countries = @Html.Raw(countriesJson);
+        function filterCountries() 
+        {
+            const searchText = searchInput.value.toLowerCase();
+            countryList.innerHTML = '';
+            for (const country of countries) 
+            {
+                const countryLower = country.toLowerCase();
+                if (countryLower.includes(searchText)) 
+                {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = country;
+                    countryList.appendChild(listItem);
+                }
+            }
+        }
+    </script>
+}
